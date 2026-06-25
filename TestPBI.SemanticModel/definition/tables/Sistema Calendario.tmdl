@@ -1,0 +1,80 @@
+table 'Sistema Calendario'
+	lineageTag: 530aa4f4-7dec-4bbc-afac-3b9d4878be74
+
+	column CodigoDia
+		dataType: string
+		lineageTag: d5dfb976-adc0-451c-8748-c4b1aab123cf
+		summarizeBy: none
+		sourceColumn: CodigoDia
+
+		annotation SummarizationSetBy = Automatic
+
+	column FechaDia
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 566abc30-b533-4705-8267-deb0e069ac23
+		summarizeBy: none
+		sourceColumn: FechaDia
+
+		variation Variación
+			isDefault
+			relationship: b20d3d95-af5a-491b-992d-93f400a5e006
+			defaultHierarchy: LocalDateTable_7b6f3cf2-60c6-4f98-b046-8638db8a3208.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column DescripcionDia
+		dataType: string
+		lineageTag: 1b3607d2-8b15-4adf-a36c-460d5e8d9934
+		summarizeBy: none
+		sourceColumn: DescripcionDia
+
+		annotation SummarizationSetBy = Automatic
+
+	column CodigoMes
+		dataType: string
+		lineageTag: 156ecd21-1965-42e4-827e-1941fdfd35bf
+		summarizeBy: none
+		sourceColumn: CodigoMes
+
+		annotation SummarizationSetBy = Automatic
+
+	column DescripcionMes
+		dataType: string
+		lineageTag: ccef1545-4631-4640-bc73-c7c8e2c38db0
+		summarizeBy: none
+		sourceColumn: DescripcionMes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año
+		dataType: string
+		lineageTag: 1e55df2e-e335-4bba-a0b9-f78dd5d4d623
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column AñoFiscal
+		dataType: int64
+		formatString: 0
+		lineageTag: 5d9637e9-8dbd-4946-93ea-52154c5a980b
+		summarizeBy: sum
+		sourceColumn: AñoFiscal
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Sistema Calendario' = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Databases("synwwelzprodwh01.sql.azuresynapse.net"),
+				    matsa_sy_dw_pro = Origen{[Name="matsa_sy_dw_pro"]}[Data],
+				    Sistema_Calendario = matsa_sy_dw_pro{[Schema="Sistema",Item="Calendario"]}[Data]
+				in
+				    Sistema_Calendario
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
